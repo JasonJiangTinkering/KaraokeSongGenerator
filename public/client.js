@@ -13,13 +13,24 @@ $(function() {
     var dream = $("#dream").val()
     data.append('name', name);
     data.append("dream", dream);
-    $.post(
-      "/dream", 
-      data, 
-      function(data){
-      console.log(data);
-    }, 
-      "multipart/form-data")
+    $.ajax({
+    type : 'POST',
+    url : '/dream',
+    data: data,
+    processData: false,  // tell jQuery not to process the data
+    contentType: false,   // tell jQuery not to set contentType
+    success: function(data) {
+      if (data == "success"){
+        alert("Fountain successfully added!!");
+        window.location.reload(true);
+      }else {
+        alert(data);
+      }
+    },
+    error: function(e) {
+     console.log();(e);
+    }
+    })
   });
 
 });

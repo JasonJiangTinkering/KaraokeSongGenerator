@@ -12,7 +12,9 @@ app = Flask(__name__, static_folder='public', template_folder='views')
 app.secret = os.environ.get('SECRET')
 
 # Dream database. Store dreams in memory for now. 
-DREAMS = []
+from google.cloud import datastore
+datastore_client = datastore.Client()
+
 @app.after_request
 def apply_kr_hello(response):
     """Adds some headers to all responses."""
@@ -40,6 +42,8 @@ def dream():
     if request.method == "POST":
       if "name" in request.form and "dream" in request.form:
         print("got name + " + request.form["name"] + " + dream " + request.form["dream"])
+        task_key = datastore_client.key("kind", name)
+        
     
     # Return the list of remembered dream. 
     return "hi"
