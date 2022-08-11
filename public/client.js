@@ -12,15 +12,18 @@ $(function() {
       $('<li></li>').text(dream).appendTo('ul#dreams');
     });
   });
-
-  $('form').submit(function(event) {
-    event.preventDefault();
-    let dream = $('input').val();
-    $.post('/dreams?' + $.param({dream: dream}), function() {
-      $('<li></li>').text(dream).appendTo('ul#dreams');
-      $('input').val('');
-      $('input').focus();
-    });
-  });
+  
+  var data = new FormData();
+  
+  data.append('name', $("#name").val());
+  data.append("dream", $("#dream").val());
+  $.post(
+    "/dream", 
+    data, 
+    function(data){
+    console.log(data);
+  }, 
+    "multipart/form-data")
+  
 
 });

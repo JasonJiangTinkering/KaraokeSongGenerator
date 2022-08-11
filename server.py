@@ -1,14 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-#       _                              
-#      | |                             
-#    __| |_ __ ___  __ _ _ __ ___  ___ 
-#   / _` | '__/ _ \/ _` | '_ ` _ \/ __|
-#  | (_| | | |  __/ (_| | | | | | \__ \
-#   \__,_|_|  \___|\__,_|_| |_| |_|___/ .
-#
-# A 'Fog Creek'–inspired demo by Kenneth Reitz™
 
 import os
 from flask import Flask, request, render_template, jsonify
@@ -20,9 +12,7 @@ app = Flask(__name__, static_folder='public', template_folder='views')
 app.secret = os.environ.get('SECRET')
 
 # Dream database. Store dreams in memory for now. 
-DREAMS = ['Python. Python, everywhere.']
-
-
+DREAMS = []
 @app.after_request
 def apply_kr_hello(response):
     """Adds some headers to all responses."""
@@ -41,18 +31,18 @@ def homepage():
     """Displays the homepage."""
     return render_template('index.html')
     
-@app.route('/dreams', methods=['GET', 'POST'])
-def dreams():
-    """Simple API endpoint for dreams. 
-    In memory, ephemeral, like real dreams.
+@app.route('/dream', methods=['GET', 'POST'])
+def dream():
+    """Simple API endpoint for dream. 
+    In memory, ephemeral, like real dream.
     """
   
-    # Add a dream to the in-memory database, if given. 
-    if 'dreams' in request.args:
-        DREAMS.append(request.args['dreams'])
+    if request.method == "POST":
+      if "name" in request.form and "dream" in request.form:
+        print()
     
-    # Return the list of remembered dreams. 
-    return jsonify(DREAMS)
+    # Return the list of remembered dream. 
+    return jsonify(DREAM)
 
 if __name__ == '__main__':
     app.run()
