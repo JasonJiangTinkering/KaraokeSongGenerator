@@ -6,24 +6,20 @@
 
 $(function() {
   console.log('hello world :o');
-  
-  $.get('/dreams', function(dreams) {
-    dreams.forEach(function(dream) {
-      $('<li></li>').text(dream).appendTo('ul#dreams');
-    });
+  $('form').submit(function(event) {
+    event.preventDefault();
+    var data = new FormData();
+    var name = $("#name").val()
+    var dream = $("#dream").val()
+    data.append('name', name);
+    data.append("dream", dream);
+    $.post(
+      "/dream", 
+      data, 
+      function(data){
+      console.log(data);
+    }, 
+      "multipart/form-data")
   });
-  
-  var data = new FormData();
-  
-  data.append('name', $("#name").val());
-  data.append("dream", $("#dream").val());
-  $.post(
-    "/dream", 
-    data, 
-    function(data){
-    console.log(data);
-  }, 
-    "multipart/form-data")
-  
 
 });

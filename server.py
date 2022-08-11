@@ -39,10 +39,10 @@ def dream():
   
     if request.method == "POST":
       if "name" in request.form and "dream" in request.form:
-        print()
+        print("got name + " + request.form["name"] + " + dream " + request.form["dream"])
     
     # Return the list of remembered dream. 
-    return jsonify(DREAM)
+    return "hi"
 
 if __name__ == '__main__':
     app.run()
