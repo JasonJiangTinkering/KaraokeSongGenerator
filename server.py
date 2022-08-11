@@ -38,15 +38,25 @@ def dream():
     """Simple API endpoint for dream. 
     In memory, ephemeral, like real dream.
     """
-  
     if request.method == "POST":
       if "name" in request.form and "dream" in request.form:
         print("got name + " + request.form["name"] + " + dream " + request.form["dream"])
-        task_key = datastore_client.key("kind", name)
-        
+        name = request.form["name"]
+        dream = request.form["dream"]
+        task_key = datastore_client.key("Dream", name)
+        task = datastore.Entity(key=task_key)
+        task["content"] = dream
+        datastore_client.put(task)
+        return("Saved " + task.key.name + ":" + task['content'])
+       # Return the list of remembered dream. 
+      return "BAD"
+    query = datastore_client.query(kind='Dream').fetch()
+    returnstring =""
+    for i in query:
+      returnstring = returnstring + i["content"]
     
-    # Return the list of remembered dream. 
-    return "hi"
+    return returnstring
+   
 
 if __name__ == '__main__':
     app.run()
