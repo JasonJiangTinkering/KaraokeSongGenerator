@@ -173,9 +173,17 @@ app.get('/callback', function(req, res) {
               for (var i=0; i < topsongs.length; i++){
                 var songid = topsongs[i].id;
                 if (prior[songid] == undefined){
-                  prior[songid] = 1;
+                  artists = ""
+                  for (var arti = 0; arti < topsongs[i].artists.length; arti++){
+                    artists += topsongs[i].artists[arti].name +", "
+                  }
+                  prior[songid] = {
+                    "quanity": 1,
+                    "name": topsongs[i].name,
+                    "artists": artists,
+                  };
                 }else{
-                  prior[songid] = prior[songid] + 1;
+                  prior[songid]["quanity"] = prior[songid]["quanity"] + 1;
                 }
               }
               var items = Object.keys(prior).map(function(key) {
@@ -184,16 +192,17 @@ app.get('/callback', function(req, res) {
               console.log(items)
               // Sort the array based on the second element
               items.sort(function(first, second) {
-                return second[1] - first[1];
+                return second[1]["quanity"] - first[1]["quanity"];
               });
               GenSongOrder = [];
               for (var i = 0; i <items.length; i ++){
-                GenSongOrder.push(items[i][0]);
+                GenSongOrder.push(items[i][1]);
               }
               const data = {
                 songFrequencies: prior,
                 songOrder: GenSongOrder,
               };
+              console.log(data)
               const res = await db.collection('groups').doc('all').set(data);
               const userres = await db.collection('user').doc(email).set({"inited": true});
             }

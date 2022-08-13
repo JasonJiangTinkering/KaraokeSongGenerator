@@ -27,15 +27,22 @@
         </div>
         <div id="oauth">
         </div>
-        <script>function getKaraokeSongs(){
+        <script>
+        var songQueue;
+
+        function getKaraokeSongs(){
           const req = new XMLHttpRequest();
           req.addEventListener("load", function(data){
             var data = JSON.parse(this.responseText);
-            document.getElementById("answer").innerHTML = data[0];
+            songQueue = data
+            function returnFormatedSongTitle(data){
+              return data.name + " by: " + data.artists +" known by " + data.quanity.toString()
+            }
+            document.getElementById("answer").innerHTML = returnFormatedSongTitle(data[0]);
             for (var i = 1; i < data.length; i++){
               var list = document.getElementById("queue")
               var entry = document.createElement('li');
-              entry.appendChild(document.createTextNode(data[i]));
+              entry.appendChild(document.createTextNode(returnFormatedSongTitle(data[i])));
               list.appendChild(entry);
             }
           });
