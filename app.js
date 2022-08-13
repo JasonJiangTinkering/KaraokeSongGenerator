@@ -15,7 +15,7 @@ var cookieParser = require('cookie-parser');
 
 var client_id = '95b982b355254218934f0196bc935241'; // Your client id
 var client_secret = '7ff46356a08541e8b8d108f0e2d1f796'; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var redirect_uri = 'karaokesonggen.web.app/callback'; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -140,13 +140,14 @@ app.get('/callback', function(req, res) {
           pushTopSongs(body.email);
         });
         function pushTopSongs(email){
-          var searchParams = new URLSearchParams();
-          searchParams.append("time_range", "long_term");
-          searchParams.append("limit", "50");
+          var searchParams = {}
+          searchParams["time_range"]= "long_term";
+          searchParams["limit"]= 50;
   
           var options = {
-            url: 'https://api.spotify.com/v1/me/top/tracks',
-            headers: { 'Authorization': 'Bearer ' + access_token },
+            url: 'https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit=50',
+            headers: { 'Authorization': 'Bearer ' + access_token,
+          "Content-Type": "application/json"},
             json: true,
           };
           
